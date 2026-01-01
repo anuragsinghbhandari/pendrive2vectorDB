@@ -14,13 +14,13 @@
 There is no CPU, but there is a controller that runs firmware.
 
 ### NAND Flash memory (core storage)  
-
+```
 BLOCK (e.g. 1 MB)
  ├── Page 0 (4 KB)
  ├── Page 1 (4 KB)
  ├── Page 2 (4 KB)
  └── ...
-
+```
 - bits live here.  
 - Data is stored in pages (e.g. 4KB - 16KB)
 - Pages are grouped into erase blocks (e.g. 256 pages)
