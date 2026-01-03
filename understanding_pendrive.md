@@ -165,14 +165,14 @@ Why databases & random writes suffer
   This causes write amplification:
     Write 4 KB → flash moves 1 MB internally
 
-## USB interface Layer
+### USB interface Layer
 
 The controller speaks USB protocol
 
 Most pendrives expose: USB Mass Storage Class (MSC), this tells OS , treat
 me like a disk, send read / write commands.
 
-## File system (Not part of Pendrive)
+### File system (Not part of Pendrive)
 
 File system lives on the pendrive, but is created by the OS.
   FAT32/ exFAT/ NTFS
