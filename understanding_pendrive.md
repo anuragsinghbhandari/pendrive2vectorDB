@@ -24,17 +24,6 @@ BLOCK (e.g. 1 MB)
 
 ```
 
-* bits live here.  
-* Data is stored in pages (e.g. 4KB - 16KB)
-* Pages are grouped into erase blocks (e.g. 256 pages)
-* can do  
--- Read a page  
--- Write a page (only if empty).
-* can't do
--- overwrite a page.
-* you must have to erase the entire block first even if you want to change
-=======
-
 * bits live here.
 * Data is stored in pages (e.g. 4KB - 16KB)
 * Pages are grouped into erase blocks (e.g. 256 pages)
@@ -44,7 +33,7 @@ BLOCK (e.g. 1 MB)
 * can't do
   * overwrite a page.
 * you must have to erase the entire block first even if you want to change
-1 byte.  
+1 byte.
 
 Key limitations:
 
@@ -57,9 +46,10 @@ but you cannot flip 0 -> 1 unless erase the entire block, erase resets all
 bits in the block back to 1. (because electrons are trapped in the flash cell's
 structure, you can only reset them in large groups, not individually. )
 
-Why writing is easy but erasing is hard:-  
-writing(1->0) , electrons are pushed in , can be done per page, precise enough.
-erasing(0->1) , electrons must be pulled out requires high voltage,
+Why writing is easy but erasing is hard:-
+
+* writing(1->0) , electrons are pushed in , can be done per page, precise enough.
+* erasing(0->1) , electrons must be pulled out requires high voltage,
   causes electrical stess, cannot be precisely targeted to one cell)
 
 so the consequences:-  
