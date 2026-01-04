@@ -35,14 +35,14 @@ BLOCK (e.g. 1 MB)
 * you must have to erase the entire block first even if you want to change
 =======
 
-* bits live here.  
+* bits live here.
 * Data is stored in pages (e.g. 4KB - 16KB)
 * Pages are grouped into erase blocks (e.g. 256 pages)
-* can do  
-    Read a page  
-    Write a page (only if empty).
+* can do
+  * Read a page
+  * Write a page (only if empty).
 * can't do
-    overwrite a page.
+  * overwrite a page.
 * you must have to erase the entire block first even if you want to change
 1 byte.  
 
@@ -90,12 +90,13 @@ Raw NAND Flash
 ```
 
 Inside the controller you typically have:
-  A microcontroller / processor core
-  SRAM (small but fast)
-  DMA engines
-  ECC engines
-  USB/SATA/NVMe interface logic
-  Firmware (this is key)
+
+* A microcontroller / processor core
+* SRAM (small but fast)
+* DMA engines
+* ECC engines
+* USB/SATA/NVMe interface logic
+* Firmware (this is key)
 
 FTL is firmware inside the flash controller that makes flash look like a normal
 disk by translating logical addresses into physical flash pages.
@@ -120,51 +121,56 @@ FTL constantly remaps blocks, so block 0 today might not be the block 0 tomorrow
 #### Core responsibilities of FTL
 
 * Logical -> physical mapping  
-    FTL keeps a table:  
-      LBA -> Physical Page (e.g. LBA 1024 -> Block 87, Page 12)  
-      This table changes all the time.  
+  * FTL keeps a table:  
+    * LBA -> Physical Page (e.g. LBA 1024 -> Block 87, Page 12)  
+    * This table changes all the time.  
 * Copy-on-write (fake overwrites)  
-    When OS says write (WRITE LBA 1024), ftl does not overwrite(as discussed above),
-    it write to a new empty page and update mapping and marks old page as stale.
+  * When OS says write (WRITE LBA 1024), ftl does not overwrite(as discussed above),
+  * it write to a new empty page and update mapping and marks old page as stale.
 * Garbage Collection  
-    Block contains a mix of valid and stale pages.  
-    So FTL peroidically:  
-      Copies valid pages elsewhere  
-      Erases the whole block  
-      Reuses it  
-    Erase is delayed not immediate  
+  * Block contains a mix of valid and stale pages.  
+  * So FTL peroidically:  
+    * Copies valid pages elsewhere  
+    * Erases the whole block  
+    * Reuses it  
+  * Erase is delayed not immediate  
 * Wear leveling (prevent early death)  
-    Flash blocks wear out after limited erases.  
-    FTL ensures:  
-      Writes are spread evenly  
-      No block is overused  
-    Two types:  
-      Dynamic (new writes go to least-used blocks)  
-      Static (even rarely-changed data gets moved)  
+  * Flash blocks wear out after limited erases.  
+  * FTL ensures:  
+    * Writes are spread evenly  
+    * No block is overused  
+  * Two types:  
+    * Dynamic (new writes go to least-used blocks)  
+    * Static (even rarely-changed data gets moved)  
 
 FTL firmware maintains:  
-    Mapping tables
-    Erase counters
-    Free page lists
-    Garbage collection state
-    Error correction info (ECC)
+
+* Mapping tables
+* Erase counters
+* Free page lists
+* Garbage collection state
+* Error correction info (ECC)
 
 why pendrive FTL is weak:
-  Tiny controller
-  Little or no DRAM
-  Simplistic mapping
-  Minimal GC logical
+
+* Tiny controller
+* Little or no DRAM
+* Simplistic mapping
+* Minimal GC logical
 
 FTL lives inside Flash controller firmware
 
 Why databases & random writes suffer
 
-  Because:
-    Small overwrite → new page
-    Many overwrites → many stale pages
-    GC triggers → massive internal copying
-  This causes write amplification:
-    Write 4 KB → flash moves 1 MB internally
+* Because:  
+
+  * Small overwrite → new page
+  * Many overwrites → many stale pages
+  * GC triggers → massive internal copying
+
+* This causes write amplification:  
+
+  * Write 4 KB → flash moves 1 MB internally
 
 ### USB interface Layer
 
@@ -176,9 +182,10 @@ me like a disk, send read / write commands.
 ### File system (Not part of Pendrive)
 
 File system lives on the pendrive, but is created by the OS.
-  FAT32/ exFAT/ NTFS
-  Allocation tables
-  Directories
-  Filenames
+
+* FAT32/ exFAT/ NTFS
+* Allocation tables
+* Directories
+* Filenames
 
 Pendrives don't understand files, it only understands read write commands
