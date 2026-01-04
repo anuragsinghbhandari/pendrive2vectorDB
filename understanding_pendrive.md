@@ -14,23 +14,25 @@
 There is no CPU, but there is a controller that runs firmware.
 
 ### NAND Flash memory (core storage)  
+
 ```
 BLOCK (e.g. 1 MB)
  ├── Page 0 (4 KB)
  ├── Page 1 (4 KB)
  ├── Page 2 (4 KB)
  └── ...
-<<<<<<< HEAD
+
 ```
-- bits live here.  
-- Data is stored in pages (e.g. 4KB - 16KB)
-- Pages are grouped into erase blocks (e.g. 256 pages)
-- can do  
+
+* bits live here.  
+* Data is stored in pages (e.g. 4KB - 16KB)
+* Pages are grouped into erase blocks (e.g. 256 pages)
+* can do  
 -- Read a page  
 -- Write a page (only if empty).
-- can't do
+* can't do
 -- overwrite a page.
-- you must have to erase the entire block first even if you want to change
+* you must have to erase the entire block first even if you want to change
 =======
 
 * bits live here.  
@@ -42,7 +44,6 @@ BLOCK (e.g. 1 MB)
 * can't do
     overwrite a page.
 * you must have to erase the entire block first even if you want to change
->>>>>>> 7fc5215 (updated other components:)
 1 byte.  
 
 Key limitations:
@@ -118,30 +119,30 @@ FTL constantly remaps blocks, so block 0 today might not be the block 0 tomorrow
 
 #### Core responsibilities of FTL
 
-* Logical -> physical mapping
-    FTL keeps a table:
-      LBA -> Physical Page (e.g. LBA 1024 -> Block 87, Page 12)
-      This table changes all the time.
-* Copy-on-write (fake overwrites)
+* Logical -> physical mapping  
+    FTL keeps a table:  
+      LBA -> Physical Page (e.g. LBA 1024 -> Block 87, Page 12)  
+      This table changes all the time.  
+* Copy-on-write (fake overwrites)  
     When OS says write (WRITE LBA 1024), ftl does not overwrite(as discussed above),
     it write to a new empty page and update mapping and marks old page as stale.
-* Garbage Collection
-    Block contains a mix of valid and stale pages.
-    So FTL peroidically:
-      Copies valid pages elsewhere
-      Erases the whole block
-      Reuses it
-    Erase is delayed not immediate
-* Wear leveling (prevent early death)
-    Flash blocks wear out after limited erases.
-    FTL ensures:
-      Writes are spread evenly
-      No block is overused
-    Two types:
-      Dynamic (new writes go to least-used blocks)
-      Static (even rarely-changed data gets moved)
+* Garbage Collection  
+    Block contains a mix of valid and stale pages.  
+    So FTL peroidically:  
+      Copies valid pages elsewhere  
+      Erases the whole block  
+      Reuses it  
+    Erase is delayed not immediate  
+* Wear leveling (prevent early death)  
+    Flash blocks wear out after limited erases.  
+    FTL ensures:  
+      Writes are spread evenly  
+      No block is overused  
+    Two types:  
+      Dynamic (new writes go to least-used blocks)  
+      Static (even rarely-changed data gets moved)  
 
-FTL firmware maintains:
+FTL firmware maintains:  
     Mapping tables
     Erase counters
     Free page lists
